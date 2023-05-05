@@ -1,0 +1,9 @@
+@import './variables.css';
+
+.box {
+    background-color: var(--background-color);
+    padding: 1rem;
+    border-radius: 4px;
+    border: 1px solid grey;
+    color: green;
+}
