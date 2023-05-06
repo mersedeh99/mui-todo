@@ -1,22 +1,30 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { fetchData } from "../utility/fetchAsyncData";
-import { useDispatch, useSelector } from "react-redux";
-import { getDoneList, dataReceived } from "../redux/reducers/doneListSlice";
+import { useAppSelector, useAppDispatch } from '../redux/hooks'
+import { getTodoList, dataReceived } from "../redux/reducers/todoListSlice";
 import { setTags } from "../redux/reducers/tagsSlice";
+
 import { Box, List, ListItem } from "@mui/material";
-import styles from "../styles/doneStyle.module.css";
+import styles from "../styles/todoStyle.module.css";
+
 import FilterList from "./filter";
 
-const DoneList = () => {
-    const dispatch = useDispatch()
-    const { loading, data, error } = useSelector(getDoneList)
-    const handleClick = (searchValue) => {
-        const filteredData = data.filter((item) => {
+type listItems = {
+    id:number,
+    title:string
+}
+
+const ToDoList = () => {
+    const dispatch = useAppDispatch()
+    const { loading, data, error } = useAppSelector(getTodoList)
+
+    const handleClick = (searchValue:string) => {
+        const filteredData = data.filter((item:listItems) => {
             return item.title.toLowerCase().includes(searchValue.toLowerCase());
         });
         dispatch(dataReceived(filteredData))
     }
-    const handleListClick = (title) => {
+    const handleListClick = (title:string) => {
         dispatch(setTags(title))
     }
     useEffect(() => {
@@ -30,7 +38,7 @@ const DoneList = () => {
                 <>
                     <FilterList handleClick={handleClick} />
                     <List>
-                        {data.map(item => <ListItem key={item.id} onClick={() => handleListClick(item.title)}>{item.title}</ListItem>)}
+                        {data.map((item:listItems) => <ListItem key={item.id} onClick={() => handleListClick(item.title)}>{item.title}</ListItem>)}
                     </List>
                 </>
             }
@@ -39,4 +47,4 @@ const DoneList = () => {
     )
 }
 
-export default DoneList
+export default ToDoList

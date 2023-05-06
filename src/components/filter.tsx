@@ -2,7 +2,13 @@ import { useState } from "react";
 import { TextField, Button } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 
-const FilterList = ({ handleClick }) => {
+type handleClickType = (input:string) => void;
+
+interface InputProps {
+    handleClick: handleClickType
+}
+
+const FilterList = ({ handleClick }:InputProps) => {
 
     const [searchValue, setSearchValue] = useState('')
 

@@ -1,8 +1,23 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { fetchData } from '../../utility/fetchAsyncData'
+import type { RootState } from '../store';
 
-const initialState = {
-    data: [],
+type listItems = {
+    id:number,
+    title:string
+}
+
+export interface doneListState {
+    data:Array<listItems>,
+    loading:boolean,
+    error: any
+}
+
+const initialState:doneListState = {
+    data: [{
+        id:0,
+        title:''
+    }],
     loading: false,
     error: null
 }
@@ -15,13 +30,13 @@ export const doneListSlice = createSlice({
             state.loading = true
             state.error = null
         },
-        dataReceived: (state, action) => {
+        dataReceived: (state, action:PayloadAction<Array<listItems>>) => {
             state.loading = false
             state.data = action.payload
         },
-        dataRequestFailed: (state, action) => {
+        dataRequestFailed: (state, action:PayloadAction<any>) => {
             state.loading = false
-            state.action = action.payload
+            state.error = action.payload
         }
     },
     extraReducers: builder => {
@@ -44,7 +59,7 @@ export const doneListSlice = createSlice({
 // Action creators are generated for each case reducer function
 export const { dataRequested, dataReceived, dataRequestFailed } = doneListSlice.actions
 
-export const getDoneList = (state) => state.doneList
+export const getDoneList = (state:RootState) => state.doneList
 
 
 export default doneListSlice.reducer
